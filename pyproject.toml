@@ -1,0 +1,31 @@
+[project]
+name = "personal-assistant-achievement"
+version = "2.0.0"
+description = "تطبيق شخصي عربي لإدارة المهام والعادات والإنجازات"
+requires-python = ">=3.10"
+dependencies = [
+    "flet==0.86.5",
+]
+
+[tool.flet]
+product = "المساعد الشخصي والإنجاز"
+org = "com.rayhantrade"
+bundle_id = "com.rayhantrade.personalassistant"
+company = "Rayhan Trade"
+copyright = "Copyright (C) 2026 Rayhan Trade"
+description = "تطبيق شخصي عربي لإدارة المهام والإنجازات"
+app.path = "src"
+app.module = "main"
+app.exclude = [
+    ".git",
+    ".github",
+    "__pycache__",
+    "*.db",
+    "tasks_data.json",
+]
+
+[tool.flet.android]
+min_sdk_version = 24
+target_sdk_version = 35
+artifact = "personal-assistant-achievement"
+adaptive_icon_background = "#1565C0"
