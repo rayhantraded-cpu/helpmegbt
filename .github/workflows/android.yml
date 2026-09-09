@@ -1,60 +1,56 @@
-name: Android Build
+name: Build Android App
 
 on:
   workflow_dispatch:
   push:
-    branches: ["main"]
-
-permissions:
-  contents: read
+    branches:
+      - main
 
 jobs:
-  apk:
-    name: Build Android APK
+  build-apk:
+    name: Build APK
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-
-      - name: Install Flet
-        run: python -m pip install --upgrade pip && pip install flet==0.86.5
+      - name: Checkout repository
+        uses: actions/checkout@v6
 
       - name: Build APK
-        run: flet build apk --verbose
+        id: build
+        uses: flet-dev/flet-build-action@v1
+        with:
+          target: apk
+          runner-python-version: "3.12"
+          bundled-python-version: "3.12"
+          build-number: ${{ github.run_number }}
 
       - name: Upload APK
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
-          name: android-apk
-          path: build/apk/*.apk
+          path: ${{ steps.build.outputs.archive-path }}
+          archive: false
           if-no-files-found: error
 
-  aab:
-    name: Build Android App Bundle
+  build-aab:
+    name: Build AAB
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-
-      - name: Install Flet
-        run: python -m pip install --upgrade pip && pip install flet==0.86.5
+      - name: Checkout repository
+        uses: actions/checkout@v6
 
       - name: Build AAB
-        run: flet build aab --verbose
+        id: build
+        uses: flet-dev/flet-build-action@v1
+        with:
+          target: aab
+          runner-python-version: "3.12"
+          bundled-python-version: "3.12"
+          build-number: ${{ github.run_number }}
 
       - name: Upload AAB
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
-          name: android-aab
-          path: build/aab/*.aab
+          path: ${{ steps.build.outputs.archive-path }}
+          archive: false
           if-no-files-found: error
