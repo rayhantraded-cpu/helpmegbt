@@ -1,4 +1,4 @@
-name: Build Android App
+name: Build Android APK
 
 on:
   workflow_dispatch:
@@ -7,7 +7,7 @@ on:
       - main
 
 jobs:
-  build-apk:
+  build:
     name: Build APK
     runs-on: ubuntu-latest
 
@@ -27,30 +27,7 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v7
         with:
-          path: ${{ steps.build.outputs.archive-path }}
-          archive: false
-          if-no-files-found: error
-
-  build-aab:
-    name: Build AAB
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-
-      - name: Build AAB
-        id: build
-        uses: flet-dev/flet-build-action@v1
-        with:
-          target: aab
-          runner-python-version: "3.12"
-          bundled-python-version: "3.12"
-          build-number: ${{ github.run_number }}
-
-      - name: Upload AAB
-        uses: actions/upload-artifact@v7
-        with:
+          name: personal-assistant-apk
           path: ${{ steps.build.outputs.archive-path }}
           archive: false
           if-no-files-found: error
