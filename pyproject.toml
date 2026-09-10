@@ -2,7 +2,7 @@
 name = "personal-assistant-achievement"
 version = "2.0.0"
 description = "تطبيق شخصي عربي لإدارة المهام والعادات والإنجازات"
-requires-python = ">=3.10"
+requires-python = ">=3.12"
 dependencies = [
     "flet==0.86.5",
 ]
@@ -16,13 +16,6 @@ copyright = "Copyright (C) 2026 Rayhan Trade"
 description = "تطبيق شخصي عربي لإدارة المهام والإنجازات"
 app.path = "src"
 app.module = "main"
-app.exclude = [
-    ".git",
-    ".github",
-    "__pycache__",
-    "*.db",
-    "tasks_data.json",
-]
 
 [tool.flet.android]
 min_sdk_version = 24
