@@ -176,7 +176,7 @@ def main(page: ft.Page):
     period_tabs = ft.Tabs(
         selected_index=0,
         animation_duration=200,
-        tabs=[ft.Tab(text=x[0], icon=x[2]) for x in PERIODS],
+        tabs=[ft.Tab(label=ft.Text(x[0]), icon=x[2]) for x in PERIODS],
     )
 
     def period_changed(e):
