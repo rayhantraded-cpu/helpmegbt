@@ -55,14 +55,17 @@ MOTIVATION = [
 
 
 def main(page: ft.Page):
+    # Initialize the SQLite schema before reading any application state.
+    # This is required on a fresh Android installation because the database
+    # file exists before its tables have been created.
+    init_db()
+
     page.title = APP_NAME
     page.rtl = True
     page.padding = 0
     page.spacing = 0
     page.theme_mode = ft.ThemeMode.DARK if get_state("theme_mode", "light") == "dark" else ft.ThemeMode.LIGHT
     page.bgcolor = ft.Colors.GREY_50
-
-    init_db()
 
     # Import the previous JSON database, if it exists in the app storage.
     legacy_path = get_storage_path() / "tasks_data.json"
