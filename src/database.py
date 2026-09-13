@@ -5,27 +5,30 @@ from pathlib import Path
 APP_DIR_NAME = "personal_productivity_app"
 DB_FILE_NAME = "personal_assistant.db"
 
-
 def get_storage_path() -> Path:
     base_dir = os.environ.get("FLET_APP_STORAGE_DATA")
     if base_dir:
         path = Path(base_dir)
     else:
-        path = Path.home() / f".{APP_DIR_NAME}"
+        # استخدام try-except لتجنب خطأ RuntimeError في أندرويد
+        try:
+            path = Path.home() / f".{APP_DIR_NAME}"
+        except RuntimeError:
+            # في أندرويد، المسار الحالي (cwd) هو مسار التطبيق الآمن والمصرح بالكتابة فيه
+            path = Path(os.getcwd()) / f".{APP_DIR_NAME}"
+            
     path.mkdir(parents=True, exist_ok=True)
     return path
 
-
 DB_NAME = str(get_storage_path() / DB_FILE_NAME)
-
 
 def connect_db():
     conn = sqlite3.connect(DB_NAME)
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA foreign_keys = ON")
-    conn.execute("PRAGMA journal_mode = WAL")
+    # تم تغيير وضع WAL إلى DELETE لضمان التوافق مع أنظمة ملفات أندرويد
+    conn.execute("PRAGMA journal_mode = DELETE")
     return conn
-
 
 def init_db():
     with connect_db() as conn:
@@ -134,14 +137,12 @@ def init_db():
                 (key, value),
             )
 
-
 def get_state(key: str, default: str = "") -> str:
     with connect_db() as conn:
         row = conn.execute(
             "SELECT value FROM app_state WHERE key = ?", (key,)
         ).fetchone()
         return row["value"] if row else default
-
 
 def set_state(key: str, value) -> None:
     with connect_db() as conn:
@@ -153,14 +154,14 @@ def set_state(key: str, value) -> None:
             (key, str(value)),
         )
 
-
 def get_all_state() -> dict:
     with connect_db() as conn:
         rows = conn.execute("SELECT key, value FROM app_state").fetchall()
         return {row["key"]: row["value"] for row in rows}
 
-
 def export_database(destination: str) -> None:
+    # ملاحظة: لتجنب خطأ PermissionError في أندرويد، يجب التأكد من أن 
+    # المتغير destination يمثل مساراً مصرحاً به (مثل مسار تم اختياره عبر FilePicker)
     destination_path = Path(destination)
     destination_path.parent.mkdir(parents=True, exist_ok=True)
     source = connect_db()
