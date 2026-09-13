@@ -103,7 +103,7 @@ def main(page: ft.Page):
         points_value.value = str(stats["points"])
 
     header = ft.Container(
-        padding=ft.padding.symmetric(horizontal=16, vertical=14),
+        padding=ft.Padding.symmetric(horizontal=16, vertical=14),
         bgcolor=ft.Colors.BLUE_700,
         content=ft.Row(
             [
@@ -505,7 +505,7 @@ def main(page: ft.Page):
     body = ft.Column(
         [
             ft.Container(
-                padding=ft.padding.symmetric(horizontal=16, vertical=12),
+                padding=ft.Padding.symmetric(horizontal=16, vertical=12),
                 content=ft.Column(
                     [
                         ft.Text(random.choice(MOTIVATION), size=13, color=ft.Colors.BLUE_800, weight=ft.FontWeight.BOLD),
@@ -517,7 +517,7 @@ def main(page: ft.Page):
             ),
             ft.Container(
                 expand=True,
-                padding=ft.padding.symmetric(horizontal=12),
+                padding=ft.Padding.symmetric(horizontal=12),
                 content=task_list,
             ),
         ],
