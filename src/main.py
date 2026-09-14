@@ -174,9 +174,12 @@ def main(page: ft.Page):
             )
 
     period_tabs = ft.Tabs(
+        length=len(PERIODS),
         selected_index=0,
         animation_duration=200,
-        tabs=[ft.Tab(label=ft.Text(x[0]), icon=x[2]) for x in PERIODS],
+        content=ft.TabBar(
+            tabs=[ft.Tab(label=ft.Text(x[0]), icon=x[2]) for x in PERIODS]
+        ),
     )
 
     def period_changed(e):
